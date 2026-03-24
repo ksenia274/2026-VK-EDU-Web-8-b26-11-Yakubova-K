@@ -1,0 +1,80 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+  
+  body {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #ffecd2, #fcb69f);
+    font-family: 'Inter', sans-serif;
+    color: #111827;
+  }
+  
+  .navbar {
+    background: linear-gradient(90deg, #ff3d77, #ff7a18);
+  }
+  
+  .navbar .navbar-brand,
+  .navbar .nav-link,
+  .navbar .btn {
+    color: #ffffff !important;
+    font-weight: 600;
+  }
+  
+  .navbar .btn:hover {
+    background: #e63366;
+    color: #ffffff !important;
+  }
+  
+  .container {
+    max-width: 1100px;
+  }
+  
+  .card {
+    border-radius: 18px;
+    border: none;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    transition: 0.2s;
+  }
+  
+  .card:hover {
+    transform: translateY(-5px) scale(1.01);
+  }
+  
+  .badge {
+    background: #ff3d77;
+    color: #ffffff;
+  }
+  
+  .sidebar {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 18px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  }
+  
+  .btn-primary {
+    background: #ff3d77;
+    border: none;
+  }
+  
+  .btn-primary:hover {
+    background: #e63366;
+  }
+  
+  .btn-success {
+    background: #ff7a18;
+    border: none;
+  }
+  
+  .avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 3px solid #ff3d77;
+  }
+  
+  h3, h5 {
+    font-weight: 700;
+  }
