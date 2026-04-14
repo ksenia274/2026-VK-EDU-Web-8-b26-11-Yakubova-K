@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Sign Up — AskIt{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-5">
+    <div class="card">
+      <div class="card-body p-4">
+        <h3 class="mb-4 text-center">Sign Up</h3>
+        <form method="post" action="#">
+          {% csrf_token %}
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Username</label>
+            <input type="text" name="username" class="form-control" placeholder="Choose a username" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Email</label>
+            <input type="email" name="email" class="form-control" placeholder="Your email address" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Avatar</label>
+            <input type="file" name="avatar" class="form-control" accept="image/*">
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Password</label>
+            <input type="password" name="password" class="form-control" placeholder="Choose a password" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Confirm Password</label>
+            <input type="password" name="password2" class="form-control" placeholder="Repeat your password" required>
+          </div>
+          <div class="d-grid">
+            <button type="submit" class="btn btn-success">Register</button>
+          </div>
+        </form>
+        <p class="text-center mt-3 mb-0">
+          Already have an account? <a href="{% url 'login' %}">Login</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
