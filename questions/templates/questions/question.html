@@ -10,39 +10,39 @@
     <div class="card mb-4">
       <div class="card-body">
         <h3>{{ question.title }}</h3>
-        <p>{{ question.text }}</p>
+        <p>{{ question.content }}</p>
         <div class="d-flex justify-content-between align-items-center">
           <div>
-            {% for tag in question.tags %}
-              <a href="{% url 'tag' tag %}" class="badge text-decoration-none me-1">#{{ tag }}</a>
+            {% for tag in question.tags.all %}
+              <a href="{% url 'tag' tag.name %}" class="badge text-decoration-none me-1">#{{ tag.name }}</a>
             {% endfor %}
           </div>
           <small class="text-muted">
-            by <strong>{{ question.author }}</strong> &bull; {{ question.votes }} votes
+            by <strong>{{ question.author.username }}</strong> &bull; {{ question.rating }} голосов
           </small>
         </div>
       </div>
     </div>
 
-    <h5 class="mb-3">Answers</h5>
+    <h5 class="mb-3">Ответы</h5>
 
     {% for answer in answers %}
       {% include "questions/includes/answer_card.html" %}
     {% empty %}
-      <p class="text-muted">No answers yet. Be the first!</p>
+      <p class="text-muted">Пока нет ни одного ответа. Будьте первым!</p>
     {% endfor %}
 
     {% include "includes/pagination.html" with page=answers %}
 
     <div class="card mt-4">
       <div class="card-body">
-        <h5>Your Answer</h5>
+        <h5>Ваш ответ</h5>
         <form method="post" action="#">
           {% csrf_token %}
           <div class="mb-3">
-            <textarea class="form-control" name="text" rows="5" placeholder="Write your answer here..."></textarea>
+            <textarea class="form-control" name="text" rows="5" placeholder="Напишите ваш ответ здесь..."></textarea>
           </div>
-          <button type="submit" class="btn btn-primary">Submit Answer</button>
+          <button type="submit" class="btn btn-primary">Отправить ответ</button>
         </form>
       </div>
     </div>
