@@ -3,7 +3,7 @@ from django.urls import reverse
 
 
 class Tag(models.Model):
-    name = models.SlugField(max_length=50, unique=True, verbose_name='Название')
+    name = models.SlugField(max_length=50, unique=True, allow_unicode=True, verbose_name='Название')
 
     class Meta:
         verbose_name = 'Тег'

@@ -16,14 +16,17 @@
           </li>
         </ul>
         <div class="d-flex gap-2 align-items-center">
-          <a href="{% url 'ask' %}" class="btn btn-outline-light">Задать вопрос</a>
           {% if user.is_authenticated %}
+            <a href="{% url 'ask' %}" class="btn btn-outline-light">Задать вопрос</a>
             <a href="{% url 'profile' %}" class="btn btn-outline-light">{{ user.username }}</a>
             <form method="post" action="{% url 'logout' %}" class="m-0">
               {% csrf_token %}
+              <input type="hidden" name="next" value="{{ request.path }}">
               <button type="submit" class="btn btn-outline-light">Выйти</button>
             </form>
           {% else %}
+            <a href="{% url 'login' %}?next={% url 'ask' %}" class="btn btn-outline-light disabled"
+               aria-disabled="true" title="Войдите, чтобы задать вопрос">Задать вопрос</a>
             <a href="{% url 'login' %}" class="btn btn-outline-light">Войти</a>
             <a href="{% url 'signup' %}" class="btn btn-outline-light">Регистрация</a>
           {% endif %}

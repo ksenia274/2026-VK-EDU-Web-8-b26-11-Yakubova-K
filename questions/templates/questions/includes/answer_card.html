@@ -1,4 +1,4 @@
-<div class="card mb-3 {% if answer.is_correct %}border-success{% endif %}">
+<div id="answer-{{ answer.pk }}" class="card mb-3 {% if answer.is_correct %}border-success{% endif %}">
   <div class="card-body">
     {% if answer.is_correct %}
       <span class="badge bg-success mb-2">Правильный ответ</span>
