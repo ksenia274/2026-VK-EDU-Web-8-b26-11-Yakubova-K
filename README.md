@@ -1,32 +1,67 @@
 # AskIt
-Статическая верстка Q&A сайта
 
-## Запуск
-```
-python -m http.server 8000
-Открыть http://localhost:8000/public
+Q&A web application built with Django.
+
+## Pages
+
+| URL | Description |
+|-----|-------------|
+| `/` | New questions (home) |
+| `/hot/` | Hot questions |
+| `/tag/<tag>/` | Questions by tag |
+| `/question/<id>/` | Single question with answers |
+| `/ask/` | Ask a question |
+| `/login/` | Login form |
+| `/signup/` | Registration form |
+| `/profile/` | Edit profile |
+
+## Local Setup
+
+```bash
+python -m venv venv
+# Windows:
+venv\Scripts\activate
+# Linux/macOS:
+source venv/bin/activate
+
+pip install -r requirements.txt
+
+python manage.py migrate
+
+python manage.py runserver
 ```
 
-## Структура репозитория
+Open http://localhost:8000 in your browser.
+
+## Docker Setup
+
+```bash
+docker compose up --build
 ```
-askit/
-├── public/
+
+Open http://localhost:8000
+
+## Project Structure
+
+```
+2026-VK-EDU-Web-8-b26-11-Yakubova-K/
+├── application/          
+├── core/                 
+│   ├── templates/core/
+│   └── static/core/
+├── questions/           
+│   ├── templates/questions/
+│   └── static/questions/
+├── templates/            
 │   ├── base.html
-│   ├── index.html
-│   ├── question.html
-│   ├── ask.html
-│   ├── login.html
-│   ├── signup.html
-│   └── profile.html
-├── public/static/
-│   ├── css/
-│   │   ├── bootstrap.min.css
-│   │   └── styles.css
-│   ├── js/
-│   │   ├── bootstrap.bundle.min.js
-│   │   └── main.js
-│   └── img/
-│       └── avatar.png
-├── .gitignore
-└── README.md
+│   └── includes/
+├── static/              
+├── media/                
+├── public/              
+├── manage.py
+├── requirements.txt
+├── Dockerfile
+├── docker-compose.yml
+├── .env.example
+└── .gitignore
 ```

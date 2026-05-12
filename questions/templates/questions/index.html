@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ page_title }} — AskIt{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-lg-8 col-md-12">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h3>{{ page_title }}</h3>
+      {% if current_tag %}
+        <span class="badge fs-6">#{{ current_tag }}</span>
+      {% endif %}
+    </div>
+
+    {% for question in questions %}
+      {% include "questions/includes/question_card.html" %}
+    {% empty %}
+      <p class="text-muted">No questions found.</p>
+    {% endfor %}
+
+    {% include "includes/pagination.html" with page=questions %}
+
+  </div>
+  <div class="col-lg-4 col-md-12">
+    {% include "includes/sidebar.html" %}
+  </div>
+</div>
+{% endblock %}

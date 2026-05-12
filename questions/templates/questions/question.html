@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ question.title }} — AskIt{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-lg-8 col-md-12">
+
+    <div class="card mb-4">
+      <div class="card-body">
+        <h3>{{ question.title }}</h3>
+        <p>{{ question.text }}</p>
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            {% for tag in question.tags %}
+              <a href="{% url 'tag' tag %}" class="badge text-decoration-none me-1">#{{ tag }}</a>
+            {% endfor %}
+          </div>
+          <small class="text-muted">
+            by <strong>{{ question.author }}</strong> &bull; {{ question.votes }} votes
+          </small>
+        </div>
+      </div>
+    </div>
+
+    <h5 class="mb-3">Answers</h5>
+
+    {% for answer in answers %}
+      {% include "questions/includes/answer_card.html" %}
+    {% empty %}
+      <p class="text-muted">No answers yet. Be the first!</p>
+    {% endfor %}
+
+    {% include "includes/pagination.html" with page=answers %}
+
+    <div class="card mt-4">
+      <div class="card-body">
+        <h5>Your Answer</h5>
+        <form method="post" action="#">
+          {% csrf_token %}
+          <div class="mb-3">
+            <textarea class="form-control" name="text" rows="5" placeholder="Write your answer here..."></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Submit Answer</button>
+        </form>
+      </div>
+    </div>
+
+  </div>
+  <div class="col-lg-4 col-md-12">
+    {% include "includes/sidebar.html" %}
+  </div>
+</div>
+{% endblock %}

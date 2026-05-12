@@ -1,0 +1,15 @@
+{% load static %}
+<aside class="sidebar p-3 mb-4">
+  <h5>Popular Tags</h5>
+  <div class="mb-3">
+    {% for tag in tags %}
+      <a href="{% url 'tag' tag %}" class="badge text-decoration-none mb-1">{{ tag }}</a>
+    {% endfor %}
+  </div>
+  <h5>Best Members</h5>
+  {% for member in best_members %}
+    <div class="py-1">
+      <a href="{% url 'profile' %}" class="text-dark text-decoration-none fw-semibold">{{ member.username }}</a>
+    </div>
+  {% endfor %}
+</aside>
