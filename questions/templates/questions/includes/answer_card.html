@@ -1,11 +1,11 @@
 <div class="card mb-3 {% if answer.is_correct %}border-success{% endif %}">
   <div class="card-body">
     {% if answer.is_correct %}
-      <span class="badge bg-success mb-2">Correct Answer</span>
+      <span class="badge bg-success mb-2">Правильный ответ</span>
     {% endif %}
-    <p class="mb-1">{{ answer.text }}</p>
+    <p class="mb-1">{{ answer.content }}</p>
     <small class="text-muted">
-      by <strong>{{ answer.author }}</strong> &bull; {{ answer.votes }} votes
+      by <strong>{{ answer.author.username }}</strong> &bull; {{ answer.rating }} голосов
     </small>
   </div>
 </div>

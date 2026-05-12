@@ -1,21 +1,34 @@
 # AskIt
 
-Q&A web application built with Django.
+Веб-приложение для вопросов и ответов на Django.
 
-## Pages
+## Страницы
 
-| URL | Description |
-|-----|-------------|
-| `/` | New questions (home) |
-| `/hot/` | Hot questions |
-| `/tag/<tag>/` | Questions by tag |
-| `/question/<id>/` | Single question with answers |
-| `/ask/` | Ask a question |
-| `/login/` | Login form |
-| `/signup/` | Registration form |
-| `/profile/` | Edit profile |
+| URL | Описание |
+|-----|----------|
+| `/` | Новые вопросы (главная) |
+| `/hot/` | Лучшие вопросы |
+| `/tag/<tag>/` | Вопросы по тегу |
+| `/question/<id>/` | Страница вопроса с ответами |
+| `/ask/` | Задать вопрос |
+| `/login/` | Вход |
+| `/signup/` | Регистрация |
+| `/profile/` | Профиль |
+| `/admin/` | Панель администратора |
 
-## Local Setup
+## Локальный запуск
+
+Требуется PostgreSQL. Проще всего поднять через Docker:
+
+```bash
+docker run -d --name askit-db \
+  -e POSTGRES_DB=askit \
+  -e POSTGRES_USER=askit \
+  -e POSTGRES_PASSWORD=askit \
+  -p 5432:5432 postgres:16-alpine
+```
+
+Затем:
 
 ```bash
 python -m venv venv
@@ -26,42 +39,61 @@ source venv/bin/activate
 
 pip install -r requirements.txt
 
+cp .env.example .env
+# заполнить SECRET_KEY и параметры БД в .env
+
 python manage.py migrate
+python manage.py createsuperuser
+python manage.py fill_db 100
 
 python manage.py runserver
 ```
 
-Open http://localhost:8000 in your browser.
+Открыть http://localhost:8000
 
-## Docker Setup
+## Запуск через Docker
 
 ```bash
-docker compose up --build
+cp .env.example .env.docker
+# заполнить .env.docker
+
+docker compose up --build -d
+docker compose exec web python manage.py migrate
+docker compose exec web python manage.py createsuperuser
+docker compose exec web python manage.py fill_db 100
 ```
 
-Open http://localhost:8000
+Открыть http://localhost:8000
 
-## Project Structure
+## fill_db
+
+Заполняет базу тестовыми данными. Аргумент `ratio` задаёт объём:
+
+| Сущность | Количество |
+|----------|------------|
+| Пользователи | ratio |
+| Вопросы | ratio × 10 |
+| Ответы | ratio × 100 |
+| Теги | ratio |
+| Лайки | ratio × 200 |
+
+```bash
+python manage.py fill_db 10000
+```
+
+## Структура проекта
 
 ```
-2026-VK-EDU-Web-8-b26-11-Yakubova-K/
-├── application/          
-├── core/                 
-│   ├── templates/core/
-│   └── static/core/
-├── questions/           
-│   ├── templates/questions/
-│   └── static/questions/
-├── templates/            
-│   ├── base.html
-│   └── includes/
-├── static/              
-├── media/                
-├── public/              
+├── application/        # Настройки Django и маршруты
+├── core/               # Профили пользователей
+├── questions/          # Вопросы, ответы, теги, лайки
+│   └── management/commands/fill_db.py
+├── templates/          # Базовые шаблоны
+├── static/
+├── media/
 ├── manage.py
 ├── requirements.txt
 ├── Dockerfile
 ├── docker-compose.yml
-├── .env.example
-└── .gitignore
+└── .env.example
 ```
