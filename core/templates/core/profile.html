@@ -1,27 +1,29 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Profile — AskIt{% endblock %}
+{% block title %}Профиль — AskIt{% endblock %}
 
 {% block content %}
 <div class="row justify-content-center">
   <div class="col-md-6">
     <div class="card">
       <div class="card-body p-4">
-        <h3 class="mb-4 text-center">Edit Profile</h3>
+        <h3 class="mb-4 text-center">Профиль</h3>
         <div class="text-center mb-4">
-          {% if user.avatar %}
-            <img src="{{ user.avatar.url }}" class="avatar mb-2" alt="Avatar">
+          {% if user.is_authenticated %}
+            <img src="{% if user.profile.avatar %}{{ user.profile.avatar.url }}{% else %}{% static 'img/avatar.png' %}{% endif %}"
+                 class="avatar mb-2" alt="Аватар">
+            <h5 class="mb-0">{{ user.username }}</h5>
+            <small class="text-muted">{{ user.email }}</small>
           {% else %}
-            <img src="{% static 'img/avatar.png' %}" class="avatar mb-2" alt="Avatar">
+            <p class="text-muted">Вы не авторизованы.</p>
           {% endif %}
-          <h5 class="mb-0">{{ user.username }}</h5>
-          <small class="text-muted">{{ user.email }}</small>
         </div>
+        {% if user.is_authenticated %}
         <form method="post" enctype="multipart/form-data" action="#">
           {% csrf_token %}
           <div class="mb-3">
-            <label class="form-label fw-semibold">Username</label>
+            <label class="form-label fw-semibold">Имя пользователя</label>
             <input type="text" name="username" class="form-control" value="{{ user.username }}">
           </div>
           <div class="mb-3">
@@ -29,13 +31,14 @@
             <input type="email" name="email" class="form-control" value="{{ user.email }}">
           </div>
           <div class="mb-3">
-            <label class="form-label fw-semibold">Avatar</label>
+            <label class="form-label fw-semibold">Аватар</label>
             <input type="file" name="avatar" class="form-control" accept="image/*">
           </div>
           <div class="d-grid">
-            <button type="submit" class="btn btn-primary">Save Changes</button>
+            <button type="submit" class="btn btn-primary">Сохранить</button>
           </div>
         </form>
+        {% endif %}
       </div>
     </div>
   </div>

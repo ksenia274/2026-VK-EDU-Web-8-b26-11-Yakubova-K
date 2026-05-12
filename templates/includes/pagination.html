@@ -1,14 +1,14 @@
 {% if page.has_other_pages %}
-<nav aria-label="Page navigation">
+<nav aria-label="Навигация по страницам">
   <ul class="pagination justify-content-center mt-4">
 
     {% if page.has_previous %}
       <li class="page-item">
-        <a class="page-link" href="?page={{ page.previous_page_number }}">&laquo; Prev</a>
+        <a class="page-link" href="?page={{ page.previous_page_number }}">&laquo; Назад</a>
       </li>
     {% else %}
       <li class="page-item disabled">
-        <span class="page-link">&laquo; Prev</span>
+        <span class="page-link">&laquo; Назад</span>
       </li>
     {% endif %}
 
@@ -26,11 +26,11 @@
 
     {% if page.has_next %}
       <li class="page-item">
-        <a class="page-link" href="?page={{ page.next_page_number }}">Next &raquo;</a>
+        <a class="page-link" href="?page={{ page.next_page_number }}">Вперёд &raquo;</a>
       </li>
     {% else %}
       <li class="page-item disabled">
-        <span class="page-link">Next &raquo;</span>
+        <span class="page-link">Вперёд &raquo;</span>
       </li>
     {% endif %}
 

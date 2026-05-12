@@ -1,30 +1,30 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Login — AskIt{% endblock %}
+{% block title %}Вход — AskIt{% endblock %}
 
 {% block content %}
 <div class="row justify-content-center">
   <div class="col-md-5">
     <div class="card">
       <div class="card-body p-4">
-        <h3 class="mb-4 text-center">Login</h3>
+        <h3 class="mb-4 text-center">Вход</h3>
         <form method="post" action="#">
           {% csrf_token %}
           <div class="mb-3">
-            <label class="form-label fw-semibold">Username</label>
-            <input type="text" name="username" class="form-control" placeholder="Your username" required>
+            <label class="form-label fw-semibold">Имя пользователя</label>
+            <input type="text" name="username" class="form-control" placeholder="Ваш логин" required>
           </div>
           <div class="mb-3">
-            <label class="form-label fw-semibold">Password</label>
-            <input type="password" name="password" class="form-control" placeholder="Your password" required>
+            <label class="form-label fw-semibold">Пароль</label>
+            <input type="password" name="password" class="form-control" placeholder="Ваш пароль" required>
           </div>
           <div class="d-grid">
-            <button type="submit" class="btn btn-primary">Login</button>
+            <button type="submit" class="btn btn-primary">Войти</button>
           </div>
         </form>
         <p class="text-center mt-3 mb-0">
-          Don't have an account? <a href="{% url 'signup' %}">Sign up</a>
+          Нет аккаунта? <a href="{% url 'signup' %}">Зарегистрироваться</a>
         </p>
       </div>
     </div>

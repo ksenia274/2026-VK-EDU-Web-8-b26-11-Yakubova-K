@@ -9,16 +9,24 @@
       <div class="collapse navbar-collapse" id="navMenu">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'index' %}">New</a>
+            <a class="nav-link" href="{% url 'index' %}">Новые</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'hot' %}">Hot</a>
+            <a class="nav-link" href="{% url 'hot' %}">Лучшие</a>
           </li>
         </ul>
-        <div class="d-flex gap-2">
-          <a href="{% url 'ask' %}" class="btn btn-outline-light">Ask Question</a>
-          <a href="{% url 'login' %}" class="btn btn-outline-light">Login</a>
-          <a href="{% url 'signup' %}" class="btn btn-outline-light">Sign Up</a>
+        <div class="d-flex gap-2 align-items-center">
+          <a href="{% url 'ask' %}" class="btn btn-outline-light">Задать вопрос</a>
+          {% if user.is_authenticated %}
+            <a href="{% url 'profile' %}" class="btn btn-outline-light">{{ user.username }}</a>
+            <form method="post" action="{% url 'logout' %}" class="m-0">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-outline-light">Выйти</button>
+            </form>
+          {% else %}
+            <a href="{% url 'login' %}" class="btn btn-outline-light">Войти</a>
+            <a href="{% url 'signup' %}" class="btn btn-outline-light">Регистрация</a>
+          {% endif %}
         </div>
       </div>
     </div>
