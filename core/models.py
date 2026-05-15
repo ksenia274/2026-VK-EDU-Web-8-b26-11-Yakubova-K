@@ -1,9 +1,16 @@
+import os
+import uuid
 from django.db import models
+
+
+def avatar_upload_to(instance, filename):
+    ext = os.path.splitext(filename)[1].lower()
+    return f'avatars/{uuid.uuid4()}{ext}'
 
 
 class Profile(models.Model):
     user = models.OneToOneField('auth.User', on_delete=models.CASCADE, related_name='profile', verbose_name='Пользователь')
-    avatar = models.ImageField(upload_to='avatars/', null=True, blank=True, verbose_name='Аватар')
+    avatar = models.ImageField(upload_to=avatar_upload_to, null=True, blank=True, verbose_name='Аватар')
 
     class Meta:
         verbose_name = 'Профиль'
