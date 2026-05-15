@@ -97,6 +97,17 @@ html {
     background: rgba(255, 61, 119, 0.06);
     border-bottom: 1px solid rgba(255, 61, 119, 0.15);
   }
+
+  .tooltip-inner {
+    background-color: #ff3d77;
+    font-size: 0.78rem;
+    padding: 4px 10px;
+    border-radius: 8px;
+  }
+
+  .tooltip .tooltip-arrow::before {
+    border-top-color: #ff3d77;
+  }
   
   h3, h5 {
     font-weight: 700;

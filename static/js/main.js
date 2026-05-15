@@ -12,6 +12,18 @@ $(function () {
         },
     });
 
+    // Инициализация Bootstrap Tooltip для всех кнопок на странице
+    document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function (el) {
+        new bootstrap.Tooltip(el, { trigger: 'hover' });
+    });
+
+    function setTooltip(el, newTitle) {
+        const tip = bootstrap.Tooltip.getInstance(el);
+        if (tip) {
+            tip.setContent({ '.tooltip-inner': newTitle });
+        }
+    }
+
     $(document).on('click', '.vote-btn', function () {
         const btn = $(this);
         const contentType = btn.data('content-type');
@@ -21,6 +33,8 @@ $(function () {
         const url = (typeof URLS !== 'undefined')
             ? (contentType === 'question' ? URLS.likeQuestion : URLS.likeAnswer)
             : (contentType === 'question' ? '/like/question/' : '/like/answer/');
+
+        bootstrap.Tooltip.getInstance(this)?.hide();
 
         $.post(url, { id: id, value: value })
             .done(function (data) {
@@ -50,19 +64,26 @@ $(function () {
 
         const url = (typeof URLS !== 'undefined') ? URLS.markCorrect : '/mark-correct/';
 
+        bootstrap.Tooltip.getInstance(this)?.hide();
+
         $.post(url, { question_id: questionId, answer_id: answerId })
             .done(function (data) {
                 $('.card[id^="answer-"]').removeClass('border-success');
                 $('.correct-badge').addClass('d-none');
                 $('.mark-correct-btn')
                     .removeClass('btn-success').addClass('btn-outline-success')
-                    .text('Отметить');
+                    .find('i').removeClass('bi-x-lg').addClass('bi-check-lg');
+                document.querySelectorAll('.mark-correct-btn').forEach(function (el) {
+                    setTooltip(el, 'Отметить как правильный');
+                });
 
                 if (data.is_correct) {
                     const card = $('#answer-' + data.answer_id);
                     card.addClass('border-success');
                     card.find('.correct-badge').removeClass('d-none');
-                    btn.removeClass('btn-outline-success').addClass('btn-success');
+                    btn.removeClass('btn-outline-success').addClass('btn-success')
+                       .find('i').removeClass('bi-check-lg').addClass('bi-x-lg');
+                    setTooltip(btn[0], 'Отметить как неправильный');
                 }
             })
             .fail(function (xhr) {

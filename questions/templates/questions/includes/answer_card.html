@@ -11,16 +11,21 @@
       {% if user.is_authenticated %}
         <button class="btn btn-sm vote-btn {% if answer.user_vote == 1 %}btn-primary{% else %}btn-outline-secondary{% endif %}"
                 data-content-type="answer" data-id="{{ answer.pk }}" data-value="like"
-                title="Лайк"><i class="bi bi-hand-thumbs-up-fill"></i></button>
+                data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Лайк">
+          <i class="bi bi-hand-thumbs-up-fill"></i>
+        </button>
         <span id="answer-rating-{{ answer.pk }}" class="fw-bold">{{ answer.rating }}</span>
         <button class="btn btn-sm vote-btn {% if answer.user_vote == -1 %}btn-danger{% else %}btn-outline-secondary{% endif %}"
                 data-content-type="answer" data-id="{{ answer.pk }}" data-value="dislike"
-                title="Дизлайк"><i class="bi bi-hand-thumbs-down-fill"></i></button>
+                data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Дизлайк">
+          <i class="bi bi-hand-thumbs-down-fill"></i>
+        </button>
         {% if user == question.author %}
           <button class="btn btn-sm mark-correct-btn {% if answer.is_correct %}btn-success{% else %}btn-outline-success{% endif %}"
                   data-question-id="{{ question.pk }}" data-answer-id="{{ answer.pk }}"
-                  title="Отметить как верный">
-            <i class="bi bi-check-lg"></i>
+                  data-bs-toggle="tooltip" data-bs-placement="top"
+                  data-bs-title="{% if answer.is_correct %}Отметить как неправильный{% else %}Отметить как правильный{% endif %}">
+            <i class="bi {% if answer.is_correct %}bi-x-lg{% else %}bi-check-lg{% endif %}"></i>
           </button>
         {% endif %}
       {% else %}

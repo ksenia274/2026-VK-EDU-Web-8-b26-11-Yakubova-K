@@ -29,11 +29,15 @@
           {% if user.is_authenticated %}
             <button class="btn btn-sm vote-btn {% if user_vote_question == 1 %}btn-primary{% else %}btn-outline-secondary{% endif %}"
                     data-content-type="question" data-id="{{ question.pk }}" data-value="like"
-                    title="Лайк"><i class="bi bi-hand-thumbs-up-fill"></i></button>
+                    data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Лайк">
+              <i class="bi bi-hand-thumbs-up-fill"></i>
+            </button>
             <span id="question-rating" class="fw-bold">{{ question.rating }}</span>
             <button class="btn btn-sm vote-btn {% if user_vote_question == -1 %}btn-danger{% else %}btn-outline-secondary{% endif %}"
                     data-content-type="question" data-id="{{ question.pk }}" data-value="dislike"
-                    title="Дизлайк"><i class="bi bi-hand-thumbs-down-fill"></i></button>
+                    data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Дизлайк">
+              <i class="bi bi-hand-thumbs-down-fill"></i>
+            </button>
           {% else %}
             <small class="text-muted">{{ question.rating }} голосов</small>
           {% endif %}
