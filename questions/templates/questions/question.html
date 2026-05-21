@@ -37,13 +37,30 @@
     <div class="card mt-4">
       <div class="card-body">
         <h5>Ваш ответ</h5>
-        <form method="post" action="#">
-          {% csrf_token %}
+        {% if user.is_authenticated %}
+          <form method="post" action="{% url 'question' question.pk %}">
+            {% csrf_token %}
+            <div class="mb-3">
+              <textarea name="content" rows="5"
+                        class="form-control{% if form.content.errors %} is-invalid{% endif %}"
+                        placeholder="Напишите ваш ответ здесь...">{{ form.content.value|default:'' }}</textarea>
+              {% for error in form.content.errors %}
+                <div class="invalid-feedback">{{ error }}</div>
+              {% endfor %}
+            </div>
+            <button type="submit" class="btn btn-primary">Отправить ответ</button>
+          </form>
+        {% else %}
           <div class="mb-3">
-            <textarea class="form-control" name="text" rows="5" placeholder="Напишите ваш ответ здесь..."></textarea>
+            <textarea class="form-control" rows="5" disabled
+                      title="Войдите, чтобы оставить ответ"></textarea>
           </div>
-          <button type="submit" class="btn btn-primary">Отправить ответ</button>
-        </form>
+          <button class="btn btn-primary" disabled
+                  title="Войдите, чтобы оставить ответ">Отправить ответ</button>
+          <p class="text-muted mt-2 mb-0 small">
+            <a href="{% url 'login' %}?next={{ request.path }}">Войдите</a>, чтобы оставить ответ.
+          </p>
+        {% endif %}
       </div>
     </div>
 

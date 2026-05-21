@@ -1,30 +1,46 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Login — AskIt{% endblock %}
+{% block title %}Вход — AskIt{% endblock %}
 
 {% block content %}
 <div class="row justify-content-center">
   <div class="col-md-5">
     <div class="card">
       <div class="card-body p-4">
-        <h3 class="mb-4 text-center">Login</h3>
-        <form method="post" action="#">
+        <h3 class="mb-4 text-center">Вход</h3>
+        <form method="post" action="{% url 'login' %}">
           {% csrf_token %}
+          <input type="hidden" name="next" value="{{ next }}">
+          {% if form.non_field_errors %}
+            <div class="alert alert-danger py-2">
+              {% for error in form.non_field_errors %}{{ error }}{% endfor %}
+            </div>
+          {% endif %}
           <div class="mb-3">
-            <label class="form-label fw-semibold">Username</label>
-            <input type="text" name="username" class="form-control" placeholder="Your username" required>
+            <label class="form-label fw-semibold">Имя пользователя</label>
+            <input type="text" name="username"
+                   class="form-control{% if form.username.errors %} is-invalid{% endif %}"
+                   placeholder="Ваш логин" value="{{ form.username.value|default:'' }}">
+            {% for error in form.username.errors %}
+              <div class="invalid-feedback">{{ error }}</div>
+            {% endfor %}
           </div>
           <div class="mb-3">
-            <label class="form-label fw-semibold">Password</label>
-            <input type="password" name="password" class="form-control" placeholder="Your password" required>
+            <label class="form-label fw-semibold">Пароль</label>
+            <input type="password" name="password"
+                   class="form-control{% if form.password.errors %} is-invalid{% endif %}"
+                   placeholder="Ваш пароль">
+            {% for error in form.password.errors %}
+              <div class="invalid-feedback">{{ error }}</div>
+            {% endfor %}
           </div>
           <div class="d-grid">
-            <button type="submit" class="btn btn-primary">Login</button>
+            <button type="submit" class="btn btn-primary">Войти</button>
           </div>
         </form>
         <p class="text-center mt-3 mb-0">
-          Don't have an account? <a href="{% url 'signup' %}">Sign up</a>
+          Нет аккаунта? <a href="{% url 'signup' %}">Зарегистрироваться</a>
         </p>
       </div>
     </div>

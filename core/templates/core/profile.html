@@ -1,39 +1,51 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Profile — AskIt{% endblock %}
+{% block title %}Профиль — AskIt{% endblock %}
 
 {% block content %}
 <div class="row justify-content-center">
   <div class="col-md-6">
     <div class="card">
       <div class="card-body p-4">
-        <h3 class="mb-4 text-center">Edit Profile</h3>
+        <h3 class="mb-4 text-center">Профиль</h3>
         <div class="text-center mb-4">
-          {% if user.avatar %}
-            <img src="{{ user.avatar.url }}" class="avatar mb-2" alt="Avatar">
-          {% else %}
-            <img src="{% static 'img/avatar.png' %}" class="avatar mb-2" alt="Avatar">
-          {% endif %}
+          <img src="{% if user.profile.avatar %}{{ user.profile.avatar.url }}{% else %}{% static 'img/avatar.png' %}{% endif %}"
+               class="avatar mb-2" alt="Аватар">
           <h5 class="mb-0">{{ user.username }}</h5>
           <small class="text-muted">{{ user.email }}</small>
         </div>
-        <form method="post" enctype="multipart/form-data" action="#">
+        <form method="post" enctype="multipart/form-data" action="{% url 'profile' %}">
           {% csrf_token %}
           <div class="mb-3">
-            <label class="form-label fw-semibold">Username</label>
-            <input type="text" name="username" class="form-control" value="{{ user.username }}">
+            <label class="form-label fw-semibold">Имя пользователя</label>
+            <input type="text" name="username"
+                   class="form-control{% if form.username.errors %} is-invalid{% endif %}"
+                   value="{{ form.username.value|default:'' }}">
+            {% for error in form.username.errors %}
+              <div class="invalid-feedback">{{ error }}</div>
+            {% endfor %}
           </div>
           <div class="mb-3">
             <label class="form-label fw-semibold">Email</label>
-            <input type="email" name="email" class="form-control" value="{{ user.email }}">
+            <input type="email" name="email"
+                   class="form-control{% if form.email.errors %} is-invalid{% endif %}"
+                   value="{{ form.email.value|default:'' }}">
+            {% for error in form.email.errors %}
+              <div class="invalid-feedback">{{ error }}</div>
+            {% endfor %}
           </div>
           <div class="mb-3">
-            <label class="form-label fw-semibold">Avatar</label>
-            <input type="file" name="avatar" class="form-control" accept="image/*">
+            <label class="form-label fw-semibold">Аватар</label>
+            <input type="file" name="avatar"
+                   class="form-control{% if form.avatar.errors %} is-invalid{% endif %}"
+                   accept="image/*">
+            {% for error in form.avatar.errors %}
+              <div class="invalid-feedback">{{ error }}</div>
+            {% endfor %}
           </div>
           <div class="d-grid">
-            <button type="submit" class="btn btn-primary">Save Changes</button>
+            <button type="submit" class="btn btn-primary">Сохранить</button>
           </div>
         </form>
       </div>

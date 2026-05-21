@@ -1,42 +1,67 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Sign Up — AskIt{% endblock %}
+{% block title %}Регистрация — AskIt{% endblock %}
 
 {% block content %}
 <div class="row justify-content-center">
   <div class="col-md-5">
     <div class="card">
       <div class="card-body p-4">
-        <h3 class="mb-4 text-center">Sign Up</h3>
-        <form method="post" action="#">
+        <h3 class="mb-4 text-center">Регистрация</h3>
+        <form method="post" action="{% url 'signup' %}" enctype="multipart/form-data">
           {% csrf_token %}
           <div class="mb-3">
-            <label class="form-label fw-semibold">Username</label>
-            <input type="text" name="username" class="form-control" placeholder="Choose a username" required>
+            <label class="form-label fw-semibold">Имя пользователя</label>
+            <input type="text" name="username"
+                   class="form-control{% if form.username.errors %} is-invalid{% endif %}"
+                   placeholder="Придумайте логин" value="{{ form.username.value|default:'' }}">
+            {% for error in form.username.errors %}
+              <div class="invalid-feedback">{{ error }}</div>
+            {% endfor %}
           </div>
           <div class="mb-3">
             <label class="form-label fw-semibold">Email</label>
-            <input type="email" name="email" class="form-control" placeholder="Your email address" required>
+            <input type="email" name="email"
+                   class="form-control{% if form.email.errors %} is-invalid{% endif %}"
+                   placeholder="Ваш email" value="{{ form.email.value|default:'' }}">
+            {% for error in form.email.errors %}
+              <div class="invalid-feedback">{{ error }}</div>
+            {% endfor %}
           </div>
           <div class="mb-3">
-            <label class="form-label fw-semibold">Avatar</label>
-            <input type="file" name="avatar" class="form-control" accept="image/*">
+            <label class="form-label fw-semibold">Аватар</label>
+            <input type="file" name="avatar"
+                   class="form-control{% if form.avatar.errors %} is-invalid{% endif %}"
+                   accept="image/*">
+            {% for error in form.avatar.errors %}
+              <div class="invalid-feedback">{{ error }}</div>
+            {% endfor %}
           </div>
           <div class="mb-3">
-            <label class="form-label fw-semibold">Password</label>
-            <input type="password" name="password" class="form-control" placeholder="Choose a password" required>
+            <label class="form-label fw-semibold">Пароль</label>
+            <input type="password" name="password"
+                   class="form-control{% if form.password.errors %} is-invalid{% endif %}"
+                   placeholder="Придумайте пароль">
+            {% for error in form.password.errors %}
+              <div class="invalid-feedback">{{ error }}</div>
+            {% endfor %}
           </div>
           <div class="mb-3">
-            <label class="form-label fw-semibold">Confirm Password</label>
-            <input type="password" name="password2" class="form-control" placeholder="Repeat your password" required>
+            <label class="form-label fw-semibold">Повторите пароль</label>
+            <input type="password" name="password2"
+                   class="form-control{% if form.password2.errors %} is-invalid{% endif %}"
+                   placeholder="Повторите пароль">
+            {% for error in form.password2.errors %}
+              <div class="invalid-feedback">{{ error }}</div>
+            {% endfor %}
           </div>
           <div class="d-grid">
-            <button type="submit" class="btn btn-success">Register</button>
+            <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
           </div>
         </form>
         <p class="text-center mt-3 mb-0">
-          Already have an account? <a href="{% url 'login' %}">Login</a>
+          Уже есть аккаунт? <a href="{% url 'login' %}">Войти</a>
         </p>
       </div>
     </div>

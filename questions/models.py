@@ -1,10 +1,9 @@
 from django.db import models
-from django.contrib.auth.models import User
 from django.urls import reverse
 
 
 class Tag(models.Model):
-    name = models.CharField(max_length=50, unique=True, verbose_name='Название')
+    name = models.SlugField(max_length=50, unique=True, allow_unicode=True, verbose_name='Название')
 
     class Meta:
         verbose_name = 'Тег'
@@ -40,9 +39,9 @@ class QuestionManager(models.Manager):
 
 class Question(models.Model):
     title = models.CharField(max_length=255, verbose_name='Заголовок')
-    content = models.TextField(verbose_name='Текст')
-    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='questions', verbose_name='Автор')
-    tags = models.ManyToManyField(Tag, related_name='questions', blank=True, verbose_name='Теги')
+    content = models.TextField(max_length=10000, verbose_name='Текст')
+    author = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='questions', verbose_name='Автор')
+    tags = models.ManyToManyField('questions.Tag', related_name='questions', blank=True, verbose_name='Теги')
     rating = models.IntegerField(default=0, verbose_name='Рейтинг')
     answers_count = models.IntegerField(default=0, verbose_name='Количество ответов')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
@@ -61,9 +60,9 @@ class Question(models.Model):
 
 
 class Answer(models.Model):
-    question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='answers', verbose_name='Вопрос')
-    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='answers', verbose_name='Автор')
-    content = models.TextField(verbose_name='Текст')
+    question = models.ForeignKey('questions.Question', on_delete=models.CASCADE, related_name='answers', verbose_name='Вопрос')
+    author = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='answers', verbose_name='Автор')
+    content = models.TextField(max_length=10000, verbose_name='Текст')
     is_correct = models.BooleanField(default=False, verbose_name='Правильный')
     rating = models.IntegerField(default=0, verbose_name='Рейтинг')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
@@ -77,8 +76,8 @@ class Answer(models.Model):
 
 
 class QuestionLike(models.Model):
-    question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='likes', verbose_name='Вопрос')
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='question_likes', verbose_name='Пользователь')
+    question = models.ForeignKey('questions.Question', on_delete=models.CASCADE, related_name='likes', verbose_name='Вопрос')
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='question_likes', verbose_name='Пользователь')
 
     class Meta:
         verbose_name = 'Лайк вопроса'
@@ -90,8 +89,8 @@ class QuestionLike(models.Model):
 
 
 class AnswerLike(models.Model):
-    answer = models.ForeignKey(Answer, on_delete=models.CASCADE, related_name='likes', verbose_name='Ответ')
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='answer_likes', verbose_name='Пользователь')
+    answer = models.ForeignKey('questions.Answer', on_delete=models.CASCADE, related_name='likes', verbose_name='Ответ')
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='answer_likes', verbose_name='Пользователь')
 
     class Meta:
         verbose_name = 'Лайк ответа'
