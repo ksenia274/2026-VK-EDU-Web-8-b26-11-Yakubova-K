@@ -75,6 +75,38 @@ html {
     height: 80px;
     border-radius: 50%;
     border: 3px solid #ff3d77;
+    object-fit: cover;
+  }
+
+  .navbar-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(255,255,255,0.6);
+  }
+
+  .chat-avatar {
+    width: 34px;
+    height: 34px;
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+
+  .card-header {
+    background: rgba(255, 61, 119, 0.06);
+    border-bottom: 1px solid rgba(255, 61, 119, 0.15);
+  }
+
+  .tooltip-inner {
+    background-color: #ff3d77;
+    font-size: 0.78rem;
+    padding: 4px 10px;
+    border-radius: 8px;
+  }
+
+  .tooltip .tooltip-arrow::before {
+    border-top-color: #ff3d77;
   }
   
   h3, h5 {

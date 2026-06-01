@@ -76,8 +76,13 @@ class Answer(models.Model):
 
 
 class QuestionLike(models.Model):
+    LIKE = 1
+    DISLIKE = -1
+    VOTE_CHOICES = [(LIKE, 'Лайк'), (DISLIKE, 'Дизлайк')]
+
     question = models.ForeignKey('questions.Question', on_delete=models.CASCADE, related_name='likes', verbose_name='Вопрос')
     user = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='question_likes', verbose_name='Пользователь')
+    value = models.SmallIntegerField(choices=VOTE_CHOICES, default=LIKE, verbose_name='Оценка')
 
     class Meta:
         verbose_name = 'Лайк вопроса'
@@ -89,8 +94,13 @@ class QuestionLike(models.Model):
 
 
 class AnswerLike(models.Model):
+    LIKE = 1
+    DISLIKE = -1
+    VOTE_CHOICES = [(LIKE, 'Лайк'), (DISLIKE, 'Дизлайк')]
+
     answer = models.ForeignKey('questions.Answer', on_delete=models.CASCADE, related_name='likes', verbose_name='Ответ')
     user = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='answer_likes', verbose_name='Пользователь')
+    value = models.SmallIntegerField(choices=VOTE_CHOICES, default=LIKE, verbose_name='Оценка')
 
     class Meta:
         verbose_name = 'Лайк ответа'

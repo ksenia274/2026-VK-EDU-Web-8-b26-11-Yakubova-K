@@ -1,9 +1,25 @@
+import os
+
 from django import forms
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
 
 from .models import Profile
+
+ALLOWED_AVATAR_EXTENSIONS = {'jpg', 'jpeg', 'png', 'gif', 'webp'}
+MAX_AVATAR_SIZE = 2 * 1024 * 1024  # 2 MB
+
+
+def validate_avatar(avatar):
+    if avatar:
+        ext = os.path.splitext(avatar.name)[1].lower().lstrip('.')
+        if ext not in ALLOWED_AVATAR_EXTENSIONS:
+            allowed = ', '.join(sorted(ALLOWED_AVATAR_EXTENSIONS))
+            raise forms.ValidationError(f'Недопустимый формат. Допустимые форматы: {allowed}.')
+        if avatar.size > MAX_AVATAR_SIZE:
+            raise forms.ValidationError('Файл слишком большой. Максимальный размер: 2 МБ.')
+    return avatar
 
 
 class LoginForm(forms.Form):
@@ -36,6 +52,9 @@ class SignupForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['email'].required = True
+
+    def clean_avatar(self):
+        return validate_avatar(self.cleaned_data.get('avatar'))
 
     def clean(self):
         cleaned_data = super().clean()
@@ -73,6 +92,9 @@ class ProfileForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['username', 'email']
+
+    def clean_avatar(self):
+        return validate_avatar(self.cleaned_data.get('avatar'))
 
     def save(self, commit=True):
         user = super().save(commit=commit)

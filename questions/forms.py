@@ -4,6 +4,19 @@ from django.utils.text import slugify
 from .models import Answer, Question, Tag
 
 
+class VoteForm(forms.Form):
+    id = forms.IntegerField(min_value=1)
+    value = forms.ChoiceField(choices=[('like', 'Лайк'), ('dislike', 'Дизлайк')])
+
+    def get_vote_value(self):
+        return 1 if self.cleaned_data['value'] == 'like' else -1
+
+
+class CorrectAnswerForm(forms.Form):
+    question_id = forms.IntegerField(min_value=1)
+    answer_id = forms.IntegerField(min_value=1)
+
+
 class AskForm(forms.ModelForm):
     tags = forms.CharField(
         label='Теги',

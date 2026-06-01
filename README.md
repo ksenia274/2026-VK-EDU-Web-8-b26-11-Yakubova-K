@@ -2,34 +2,27 @@
 
 Веб-приложение для вопросов и ответов на Django.
 
-## Страницы
+## Страницы и API
 
-| URL | Описание |
-|-----|----------|
-| `/` | Новые вопросы (главная) |
-| `/hot/` | Лучшие вопросы |
-| `/tag/<tag>/` | Вопросы по тегу |
-| `/question/<id>/` | Страница вопроса с ответами |
-| `/ask/` | Задать вопрос |
-| `/login/` | Вход (поддерживает `?next=`) |
-| `/signup/` | Регистрация |
-| `/profile/` | Редактирование своего профиля |
-| `/logout/` | Выход (только POST) |
-| `/admin/` | Панель администратора |
+| URL | Метод | Описание |
+|-----|-------|----------|
+| `/` | GET | Новые вопросы (главная) |
+| `/hot/` | GET | Лучшие вопросы |
+| `/tag/<tag>/` | GET | Вопросы по тегу |
+| `/question/<id>/` | GET, POST | Страница вопроса с ответами |
+| `/ask/` | GET, POST | Задать вопрос |
+| `/login/` | GET, POST | Вход (поддерживает `?next=`) |
+| `/signup/` | GET, POST | Регистрация |
+| `/profile/` | GET, POST | Редактирование профиля и аватарки |
+| `/logout/` | POST | Выход |
+| `/admin/` | GET | Панель администратора |
+| `/like/question/` | POST | AJAX: лайк/дизлайк вопроса → `{rating, user_vote}` |
+| `/like/answer/` | POST | AJAX: лайк/дизлайк ответа → `{rating, user_vote}` |
+| `/mark-correct/` | POST | AJAX: отметить правильный ответ → `{is_correct, answer_id}` |
 
-## Локальный запуск
+## Локальный запуск (без Docker)
 
-Требуется PostgreSQL. Проще всего поднять через Docker:
-
-```bash
-docker run -d --name askit-db \
-  -e POSTGRES_DB=askit \
-  -e POSTGRES_USER=askit \
-  -e POSTGRES_PASSWORD=askit \
-  -p 5432:5432 postgres:16-alpine
-```
-
-Затем:
+Требуется PostgreSQL с базой `askit` и пользователем `askit`.
 
 ```bash
 python -m venv venv
@@ -39,10 +32,18 @@ venv\Scripts\activate
 source venv/bin/activate
 
 pip install -r requirements.txt
+```
 
-cp .env.example .env
-# заполнить SECRET_KEY и параметры БД в .env
+Скопировать `.env.local` в `.env` и убедиться, что `DEBUG=True` (нужно для раздачи media-файлов через Django):
 
+```bash
+# Windows:
+copy .env.local .env
+# Linux/macOS:
+cp .env.local .env
+```
+
+```bash
 python manage.py migrate
 python manage.py createsuperuser
 python manage.py fill_db 100
@@ -54,10 +55,9 @@ python manage.py runserver
 
 ## Запуск через Docker
 
-```bash
-cp .env.example .env.docker
-# заполнить .env.docker
+`.env.docker` уже настроен (DB_HOST=db). Просто:
 
+```bash
 docker compose up --build -d
 docker compose exec web python manage.py migrate
 docker compose exec web python manage.py createsuperuser
@@ -86,15 +86,25 @@ python manage.py fill_db 10000
 
 ```
 ├── application/        # Настройки Django и маршруты
-├── core/               # Авторизация, регистрация, профили (views, forms)
-├── questions/          # Вопросы, ответы, теги, лайки (views, forms)
+├── core/               # Авторизация, регистрация, профили
+│   ├── models.py       # Profile (аватарка с UUID-именем)
+│   └── forms.py        # Валидация аватарки (расширение, размер)
+├── questions/          # Вопросы, ответы, теги, лайки
+│   ├── views.py        # + AJAX: like_question, like_answer, mark_correct
 │   └── management/commands/fill_db.py
 ├── templates/          # Базовые шаблоны
 ├── static/
-├── media/
+│   ├── css/
+│   │   ├── bootstrap-icons.min.css   # Bootstrap Icons (локально)
+│   │   └── fonts/
+│   └── js/
+│       └── main.js     # jQuery AJAX: лайки и правильный ответ
+├── media/              # Загруженные аватарки
 ├── manage.py
 ├── requirements.txt
 ├── Dockerfile
 ├── docker-compose.yml
-└── .env.example
+├── .env.example        # Шаблон переменных окружения
+├── .env.local          # Локальная разработка (DEBUG=True, DB_HOST=localhost)
+└── .env.docker         # Docker (DEBUG=True, DB_HOST=db)
 ```

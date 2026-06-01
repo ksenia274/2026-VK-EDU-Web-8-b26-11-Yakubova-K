@@ -3,23 +3,53 @@
 
 {% block title %}{{ question.title }} — AskIt{% endblock %}
 
+{% block extra_head %}
+<script>
+  const URLS = {
+    likeQuestion: "{% url 'like_question' %}",
+    likeAnswer: "{% url 'like_answer' %}",
+    markCorrect: "{% url 'mark_correct' %}",
+    loginUrl: "{% url 'login' %}",
+  };
+</script>
+{% endblock %}
+
 {% block content %}
 <div class="row">
   <div class="col-lg-8 col-md-12">
 
+    <!-- Вопрос -->
     <div class="card mb-4">
+      <div class="card-header d-flex align-items-center gap-2 py-2">
+        <img src="{% if question.author.profile.avatar %}{{ question.author.profile.avatar.url }}{% else %}{% static 'img/avatar.png' %}{% endif %}"
+             class="rounded-circle chat-avatar" alt="Аватар">
+        <strong>{{ question.author.username }}</strong>
+        <small class="text-muted ms-1">{{ question.created_at|date:"d M Y" }}</small>
+        <div class="ms-auto d-flex align-items-center gap-2">
+          {% if user.is_authenticated %}
+            <button class="btn btn-sm vote-btn {% if user_vote_question == 1 %}btn-primary{% else %}btn-outline-secondary{% endif %}"
+                    data-content-type="question" data-id="{{ question.pk }}" data-value="like"
+                    data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Лайк">
+              <i class="bi bi-hand-thumbs-up-fill"></i>
+            </button>
+            <span id="question-rating" class="fw-bold">{{ question.rating }}</span>
+            <button class="btn btn-sm vote-btn {% if user_vote_question == -1 %}btn-danger{% else %}btn-outline-secondary{% endif %}"
+                    data-content-type="question" data-id="{{ question.pk }}" data-value="dislike"
+                    data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Дизлайк">
+              <i class="bi bi-hand-thumbs-down-fill"></i>
+            </button>
+          {% else %}
+            <small class="text-muted">{{ question.rating }} голосов</small>
+          {% endif %}
+        </div>
+      </div>
       <div class="card-body">
-        <h3>{{ question.title }}</h3>
-        <p>{{ question.content }}</p>
-        <div class="d-flex justify-content-between align-items-center">
-          <div>
-            {% for tag in question.tags.all %}
-              <a href="{% url 'tag' tag.name %}" class="badge text-decoration-none me-1">#{{ tag.name }}</a>
-            {% endfor %}
-          </div>
-          <small class="text-muted">
-            by <strong>{{ question.author.username }}</strong> &bull; {{ question.rating }} голосов
-          </small>
+        <h4 class="mb-2">{{ question.title }}</h4>
+        <p class="mb-3">{{ question.content }}</p>
+        <div>
+          {% for tag in question.tags.all %}
+            <a href="{% url 'tag' tag.name %}" class="badge text-decoration-none me-1">#{{ tag.name }}</a>
+          {% endfor %}
         </div>
       </div>
     </div>
@@ -34,6 +64,7 @@
 
     {% include "includes/pagination.html" with page=answers %}
 
+    <!-- Форма ответа -->
     <div class="card mt-4">
       <div class="card-body">
         <h5>Ваш ответ</h5>
@@ -55,8 +86,7 @@
             <textarea class="form-control" rows="5" disabled
                       title="Войдите, чтобы оставить ответ"></textarea>
           </div>
-          <button class="btn btn-primary" disabled
-                  title="Войдите, чтобы оставить ответ">Отправить ответ</button>
+          <button class="btn btn-primary" disabled>Отправить ответ</button>
           <p class="text-muted mt-2 mb-0 small">
             <a href="{% url 'login' %}?next={{ request.path }}">Войдите</a>, чтобы оставить ответ.
           </p>

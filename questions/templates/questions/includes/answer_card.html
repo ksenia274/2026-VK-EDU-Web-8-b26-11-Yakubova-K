@@ -1,11 +1,39 @@
+{% load static %}
 <div id="answer-{{ answer.pk }}" class="card mb-3 {% if answer.is_correct %}border-success{% endif %}">
-  <div class="card-body">
-    {% if answer.is_correct %}
-      <span class="badge bg-success mb-2">Правильный ответ</span>
-    {% endif %}
-    <p class="mb-1">{{ answer.content }}</p>
-    <small class="text-muted">
-      by <strong>{{ answer.author.username }}</strong> &bull; {{ answer.rating }} голосов
-    </small>
+  <div class="card-header d-flex align-items-center gap-2 py-2">
+    <img src="{% if answer.author.profile.avatar %}{{ answer.author.profile.avatar.url }}{% else %}{% static 'img/avatar.png' %}{% endif %}"
+         class="rounded-circle chat-avatar" alt="Аватар">
+    <strong>{{ answer.author.username }}</strong>
+    <span class="correct-badge badge bg-success ms-1 {% if not answer.is_correct %}d-none{% endif %}">
+      ✓ Верный ответ
+    </span>
+    <div class="ms-auto d-flex align-items-center gap-2">
+      {% if user.is_authenticated %}
+        <button class="btn btn-sm vote-btn {% if answer.user_vote == 1 %}btn-primary{% else %}btn-outline-secondary{% endif %}"
+                data-content-type="answer" data-id="{{ answer.pk }}" data-value="like"
+                data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Лайк">
+          <i class="bi bi-hand-thumbs-up-fill"></i>
+        </button>
+        <span id="answer-rating-{{ answer.pk }}" class="fw-bold">{{ answer.rating }}</span>
+        <button class="btn btn-sm vote-btn {% if answer.user_vote == -1 %}btn-danger{% else %}btn-outline-secondary{% endif %}"
+                data-content-type="answer" data-id="{{ answer.pk }}" data-value="dislike"
+                data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Дизлайк">
+          <i class="bi bi-hand-thumbs-down-fill"></i>
+        </button>
+        {% if user == question.author %}
+          <button class="btn btn-sm mark-correct-btn {% if answer.is_correct %}btn-success{% else %}btn-outline-success{% endif %}"
+                  data-question-id="{{ question.pk }}" data-answer-id="{{ answer.pk }}"
+                  data-bs-toggle="tooltip" data-bs-placement="top"
+                  data-bs-title="{% if answer.is_correct %}Отметить как неправильный{% else %}Отметить как правильный{% endif %}">
+            <i class="bi {% if answer.is_correct %}bi-x-lg{% else %}bi-check-lg{% endif %}"></i>
+          </button>
+        {% endif %}
+      {% else %}
+        <small class="text-muted">{{ answer.rating }} голосов</small>
+      {% endif %}
+    </div>
+  </div>
+  <div class="card-body py-3">
+    <p class="mb-0">{{ answer.content }}</p>
   </div>
 </div>
